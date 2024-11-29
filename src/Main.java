@@ -17,7 +17,7 @@ public class Main {
         makingFleets.makePossibilitiesOfDamage(fleetDmg_1, fleetDmg_2, empty_fleet);
 
         //Add ships
-        fleet_1[0] = 6; fleet_1[5] = 1;
+        fleet_1[0] = 2; fleet_1[5] = 1;
         fleet_2[3] = 5;
         int addHP_1 = fleet_1[3] + fleet_1[5] + fleet_1[6];
         int addHP_2 = fleet_2[3] + fleet_2[5] + fleet_2[6];
@@ -30,3 +30,11 @@ public class Main {
     }
 
 }
+
+//fleet[0] = Fighter
+//fleet[1] = Carrier
+//fleet[2] = Destroyer
+//fleet[3] = Dreadnought
+//fleet[4] = Cruiser
+//fleet[5] = War Sun
+//fleet[6] = Flagship
