@@ -17,8 +17,8 @@ public class MathCore {
                 _Pssblty =  DamagePossibilities_1[dmgOfArmy1] * DamagePossibilities_2[dmgOfArmy2] / normalized_pssblty;
                 _Pssblty *=  PssbltyOfEvent;
 
-                int[] damagedFleet_1 = takingDamage(Army1, addHP_1, dmgOfArmy2);
-                int[] damagedFleet_2 = takingDamage(Army2, addHP_2, dmgOfArmy1);
+                int[] damagedFleet_1 = fleetProccessing.takingDamage(Army1, addHP_1, dmgOfArmy2);
+                int[] damagedFleet_2 = fleetProccessing.takingDamage(Army2, addHP_2, dmgOfArmy1);
                 if(Arrays.mismatch(damagedFleet_1,empty_fleet) == -1 && Arrays.mismatch(damagedFleet_2,empty_fleet) == -1) {
                     if(Results1.containsKey(0))
                         Results1.put(0,Results1.get(0) + _Pssblty * 100f);
@@ -26,8 +26,8 @@ public class MathCore {
                     continue;
                 }
 
-                int shipsAmount_1 = getShipsAmount(damagedFleet_1);
-                int shipsAmount_2 = getShipsAmount(damagedFleet_2);
+                int shipsAmount_1 = fleetProccessing.getShipsAmount(damagedFleet_1);
+                int shipsAmount_2 = fleetProccessing.getShipsAmount(damagedFleet_2);
 
                 if(Arrays.mismatch(damagedFleet_1,empty_fleet) == -1){
                     if(Results2.containsKey(shipsAmount_2))
@@ -46,24 +46,24 @@ public class MathCore {
 
     }
 
-    public static int[] takingDamage(int[] fleet, int addHP, int Dmg){
-        int[] workfleet = Arrays.copyOf(fleet,fleet.length);
-        if (addHP >= Dmg)
-            addHP -= Dmg;
-        else {
-            Dmg -= addHP;
-            addHP = 0;
-            for (int i = 0; i < fleet.length; i++) {
-                int substract = Math.min(Dmg, workfleet[i]);
-                Dmg -= substract;
-                workfleet[i] -= substract;
-                if (Dmg == 0)
-                    break;
-            }
-        }
-
-        return workfleet;
-    }
+//    public static int[] takingDamage(int[] fleet, int addHP, int Dmg){
+//        int[] workfleet = Arrays.copyOf(fleet,fleet.length);
+//        if (addHP >= Dmg)
+//            addHP -= Dmg;
+//        else {
+//            Dmg -= addHP;
+//            addHP = 0;
+//            for (int i = 0; i < fleet.length; i++) {
+//                int substract = Math.min(Dmg, workfleet[i]);
+//                Dmg -= substract;
+//                workfleet[i] -= substract;
+//                if (Dmg == 0)
+//                    break;
+//            }
+//        }
+//
+//        return workfleet;
+//    }
 
     public static float[] getDamagePossibilities(int[] fleet, float[] fleetDmg){
 
@@ -140,13 +140,13 @@ public class MathCore {
         return result;
     }
 
-    public static int getShipsAmount(int[] fleet){
-        int amount = 0;
-
-        for (int i = 0; i < fleet.length; i++)
-            amount += fleet[i];
-
-        return amount;
-    }
+//    public static int getShipsAmount(int[] fleet){
+//        int amount = 0;
+//
+//        for (int i = 0; i < fleet.length; i++)
+//            amount += fleet[i];
+//
+//        return amount;
+//    }
 
 }
