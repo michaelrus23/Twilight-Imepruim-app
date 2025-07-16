@@ -3,7 +3,7 @@ import java.util.HashMap;
 
 public class MathCore {
 
-    public static void CalculateChances(int[] Army1, float[] pssblty1, int addHP_1, HashMap<Integer, Float> Results1, int[] Army2, float[] pssblty2, int addHP_2, HashMap<Integer, Float> Results2, float PssbltyOfEvent, int[] empty_fleet) {
+    public static void CalculateChances(int[] Army1, float[] pssblty1, int addHP_1, HashMap<Integer, Float> Results1, int[] Army2, float[] pssblty2, int addHP_2, HashMap<Integer, Float> Results2, float PssbltyOfEvent) {
 
         float[] DamagePossibilities_1 = getDamagePossibilities(Army1, pssblty1);
         float[] DamagePossibilities_2 = getDamagePossibilities(Army2, pssblty2);
@@ -19,7 +19,11 @@ public class MathCore {
 
                 int[] damagedFleet_1 = fleetProccessing.takingDamage(Army1, addHP_1, dmgOfArmy2);
                 int[] damagedFleet_2 = fleetProccessing.takingDamage(Army2, addHP_2, dmgOfArmy1);
-                if (Arrays.mismatch(damagedFleet_1, empty_fleet) == -1 && Arrays.mismatch(damagedFleet_2, empty_fleet) == -1) {
+
+                boolean fleet1Empty = is_fleet_empty(damagedFleet_1);
+                boolean fleet2Empty = is_fleet_empty(damagedFleet_2);
+
+                if (fleet1Empty && fleet2Empty) {
                     if (Results1.containsKey(0))
                         Results1.put(0, Results1.get(0) + _Pssblty * 100f);
                     else Results1.put(0, _Pssblty * 100f);
@@ -29,23 +33,34 @@ public class MathCore {
                 int shipsAmount_1 = fleetProccessing.getShipsAmount(damagedFleet_1);
                 int shipsAmount_2 = fleetProccessing.getShipsAmount(damagedFleet_2);
 
-                if (Arrays.mismatch(damagedFleet_1, empty_fleet) == -1) {
+                if (fleet1Empty) {
                     if (Results2.containsKey(shipsAmount_2))
                         Results2.put(shipsAmount_2, Results2.get(shipsAmount_2) + _Pssblty * 100f);
                     else Results2.put(shipsAmount_2, _Pssblty * 100f);
 
-                } else if (Arrays.mismatch(damagedFleet_2, empty_fleet) == -1) {
+                } else if (fleet2Empty) {
                     if (Results1.containsKey(shipsAmount_1))
                         Results1.put(shipsAmount_1, Results1.get(shipsAmount_1) + _Pssblty * 100f);
                     else Results1.put(shipsAmount_1, _Pssblty * 100f);
 
                 } else
-                    CalculateChances(damagedFleet_1, pssblty1, Math.max(0, addHP_1 - dmgOfArmy2), Results1, damagedFleet_2, pssblty2, Math.max(0, addHP_2 - dmgOfArmy1), Results2, _Pssblty, empty_fleet);
+                    CalculateChances(damagedFleet_1, pssblty1, Math.max(0, addHP_1 - dmgOfArmy2), Results1, damagedFleet_2, pssblty2, Math.max(0, addHP_2 - dmgOfArmy1), Results2, _Pssblty);
 
             }
 
 
     }
+
+
+    public static boolean is_fleet_empty(int[] fleet){
+        for (int shipCount : fleet) {
+            if (shipCount != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public static float[] getDamagePossibilities(int[] fleet, float[] fleetDmg) {
 
@@ -107,12 +122,12 @@ public class MathCore {
         return result;
     }
 
+
     public static float getNewPssblty(int Army1, float pssblty1, int Damage1) {
 
-        float Pssblty1 = (float) (Math.pow(pssblty1, Damage1) * Math.pow(1f - pssblty1, Army1 - Damage1)) * getFactorial(Army1) / (getFactorial(Army1 - Damage1) * getFactorial(Damage1));
-
-        return Pssblty1;
+        return (float) (Math.pow(pssblty1, Damage1) * Math.pow(1f - pssblty1, Army1 - Damage1)) * getFactorial(Army1) / (getFactorial(Army1 - Damage1) * getFactorial(Damage1));
     }
+
 
     public static int getFactorial(int f) {
         int result = 1;
